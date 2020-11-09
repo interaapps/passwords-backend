@@ -59,6 +59,7 @@ public class PasswordsBackend extends WebApplication {
         map.put("INTERAAPPS_AUTH_ID", "interaapps.auth.id");
         map.put("APP_FRONTEND", "app.frontend");
         config.addEnvKeyMapping(map);
+        System.out.println(new File(".env").exists());
         config.addEnvFile(new File(".env"));
     }
 
@@ -84,6 +85,7 @@ public class PasswordsBackend extends WebApplication {
     }
 
     public void setupServer(HTTPServer httpServer) {
+        System.out.println("Working Directory = " + System.getProperty("user.dir"));
         httpServer.controller(HttpController.class, PasswordController.class.getPackage());
 
         interaAppsAccountsAPI = new HTTPClient()
