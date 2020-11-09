@@ -89,6 +89,7 @@ public class PasswordsBackend extends WebApplication {
         });
 
         httpServer.beforeInterceptor(exchange ->{
+            exchange.header("SERVER", "InteraApps-k8s");
             if (exchange.getMethod() != HttpMethod.GET)
                 exchange.attrib("parameters", new Gson().fromJson(exchange.getBody(String.class), new TypeToken<Map<String, Object>>(){}.getType()));
 
