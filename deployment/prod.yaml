@@ -49,20 +49,9 @@ spec:
   tls:
     - hosts:
         - test.passwords.interaapps.de
-        - www.test.passwords.interaapps.de
       secretName: passwords-prod-ssl
   rules:
-    - host: test.passwords.interaapps.de
-      http:
-        paths:
-          - pathType: Prefix
-            path: /
-            backend:
-              service:
-                name: passwords-prod
-                port:
-                  number: 80
-    - host: www.test.passwords.interaapps.de
+    - host: api.passwords.interaapps.de
       http:
         paths:
           - pathType: Prefix
