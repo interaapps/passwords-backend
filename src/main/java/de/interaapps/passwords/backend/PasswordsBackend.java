@@ -55,7 +55,6 @@ public class PasswordsBackend extends WebApplication {
 
     public void setupConfig(Config config) {
         config.addPropertyFile(new File(".env"));
-        System.out.println(config.get("test"));
     }
 
     public void setupInjection(SimpleInjector simpleInjector) { }
@@ -98,7 +97,8 @@ public class PasswordsBackend extends WebApplication {
                 exchange.attrib("user", user);
                 return false;
             }
-
+            if (exchange.rawRequest().getRequestURI().startsWith("/auth"))
+                return false;
             return true;
         });
 

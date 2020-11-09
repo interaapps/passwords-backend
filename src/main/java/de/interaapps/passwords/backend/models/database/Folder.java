@@ -13,9 +13,11 @@ public class Folder extends Model {
     @Column
     public int id;
 
-    // Global Folders encryption key. (Client-Encrypted by a FOLDER-Key)
     @Column
-    public String key;
+    public String name;
+
+    @Column(size = 7)
+    public String color;
 
     @Column
     public int parentId;

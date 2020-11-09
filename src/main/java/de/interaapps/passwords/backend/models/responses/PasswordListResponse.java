@@ -11,5 +11,5 @@ public class PasswordListResponse {
     public List<PasswordListResponse> folders = new ArrayList<>();
     public Folder folder;
     public String key = null; // If in Folder
-    public String parent = null;
+    public int parent;
 }

@@ -25,6 +25,10 @@ public class FolderUser extends Model {
     @Column
     public int userId;
 
+
+    @Column
+    public Type type;
+
     @Column
     Timestamp createdAt;
 

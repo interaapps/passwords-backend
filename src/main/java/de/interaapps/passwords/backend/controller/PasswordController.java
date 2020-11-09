@@ -8,6 +8,7 @@ import org.javawebstack.framework.HttpController;
 import org.javawebstack.httpserver.Exchange;
 import org.javawebstack.httpserver.router.annotation.PathPrefix;
 import org.javawebstack.httpserver.router.annotation.Post;
+import org.javawebstack.httpserver.router.annotation.Put;
 import org.javawebstack.orm.Repo;
 
 import java.util.Map;
@@ -15,7 +16,7 @@ import java.util.Map;
 @PathPrefix("/password")
 public class PasswordController extends HttpController {
 
-    @Post("")
+    @Put("")
     public SuccessResponse post(Exchange exchange){
         User user = exchange.attrib("user");
         Map<String, Object> parameters = exchange.attrib("parameters");
@@ -26,9 +27,6 @@ public class PasswordController extends HttpController {
             id = (int) (double) parameters.get("id");
 
         Password oldPassword = Repo.get(Password.class).where("id", id).get();
-
-        System.out.println("OLD: "+oldPassword.website);
-        System.out.println("NEW: "+parameters.get("website"));
 
         Password password = new Password();
 

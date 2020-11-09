@@ -16,6 +16,7 @@ public class InteraAppsAuthController extends HttpController {
 
     @Get("/login")
     public String login(Exchange exchange)  {
+        System.out.println("404");
         if (exchange.rawRequest().getParameter("userkey") != null) {
             User user = PasswordsBackend.getInstance().getUserByKey(exchange.rawRequest().getParameter("userkey"));
             if (user.valid) {
@@ -30,7 +31,7 @@ public class InteraAppsAuthController extends HttpController {
             }
         }
         exchange.redirect("https://accounts.interaapps.de/iaauth/"+ PasswordsBackend.getInstance().getConfig().get("interaapps.auth.id"));
-        return "";
+        return "a";
     }
 
 }
