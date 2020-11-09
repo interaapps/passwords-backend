@@ -54,7 +54,12 @@ public class PasswordsBackend extends WebApplication {
     }
 
     public void setupConfig(Config config) {
-        config.addPropertyFile(new File(".env"));
+        Map<String, String> map = new HashMap<>();
+        map.put("INTERAAPPS_AUTH_KEY", "interaapps.auth.key");
+        map.put("INTERAAPPS_AUTH_ID", "interaapps.auth.id");
+        map.put("APP_FRONTEND", "app.frontend");
+        config.addEnvKeyMapping(map);
+        config.addEnvFile(new File(".env"));
     }
 
     public void setupInjection(SimpleInjector simpleInjector) { }
