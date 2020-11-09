@@ -13,6 +13,7 @@ spec:
       labels:
         app: passwords-prod
     spec:
+
       containers:
         - name: passwords-prod
           image: '${CI_REGISTRY}/${CI_PROJECT_PATH}:${BRANCH_SLUG_SHORT}-${CI_COMMIT_SHORT_SHA}'
