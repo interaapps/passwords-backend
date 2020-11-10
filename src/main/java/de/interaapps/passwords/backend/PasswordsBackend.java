@@ -4,6 +4,8 @@ import com.google.gson.*;
 import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 import de.interaapps.passwords.backend.controller.PasswordController;
+import de.interaapps.passwords.backend.exceptions.AuthenticationException;
+import de.interaapps.passwords.backend.exceptions.PageNotFoundException;
 import de.interaapps.passwords.backend.models.User;
 import de.interaapps.passwords.backend.models.database.*;
 import de.interaapps.passwords.backend.models.responses.ErrorResponse;
@@ -91,10 +93,6 @@ public class PasswordsBackend extends WebApplication {
         interaAppsAccountsAPI = new HTTPClient()
                 .setBaseUrl("https://accounts.interaapps.de/iaauth/api");
 
-        httpServer.exceptionHandler((exchange, throwable)->{
-            return "{'error':true}";
-        });
-
         httpServer.beforeInterceptor(exchange ->{
             exchange.header("SERVER", "InteraApps-k8s");
             if (exchange.getMethod() != HttpMethod.GET)
@@ -107,16 +105,19 @@ public class PasswordsBackend extends WebApplication {
             }
             if (exchange.rawRequest().getRequestURI().startsWith("/auth"))
                 return false;
-            return true;
+
+            throw new AuthenticationException();
         });
-
-
 
         httpServer.exceptionHandler((ex, e)->{
             ErrorResponse errorResponse = new ErrorResponse();
             errorResponse.error = true;
-            errorResponse.message = e.getClass().getName();
+            errorResponse.message = e.getClass().getSimpleName();
             return errorResponse;
+        });
+
+        httpServer.notFound(exchange -> {
+            throw new PageNotFoundException();
         });
 
         System.out.println("SERVING ON http://localhost:"+getConfig().get("http.server.port"));
