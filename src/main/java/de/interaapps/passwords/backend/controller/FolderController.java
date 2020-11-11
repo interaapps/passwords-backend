@@ -46,8 +46,11 @@ public class FolderController extends HttpController {
 
 
         if (oldFolder == null) {
-            if (parameters.containsKey("parent") && userInFolder(user.id, (int) parameters.get("parent")))
-                folder.parentId = (int) parameters.get("parent");
+            System.out.println("YEA");
+            if (parameters.containsKey("parent") && userInFolder(user.id, (int) (double) parameters.get("parent"))) {
+                System.out.println("PARENTED");
+                folder.parentId = (int) (double) parameters.get("parent");
+            }
         }
 
         folder.save();
@@ -99,7 +102,10 @@ public class FolderController extends HttpController {
     }
 
     public static boolean userInFolder(int user, int folder){
-        return userInFolder(user, Repo.get(Folder.class).get(folder));
+        Folder folder1  =  Repo.get(Folder.class).get(folder);
+        if (folder1 == null)
+            return false;
+        return userInFolder(user, folder1);
     }
 
     public static boolean userInFolder(User user, Folder folder){
