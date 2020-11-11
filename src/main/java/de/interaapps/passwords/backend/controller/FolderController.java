@@ -80,11 +80,19 @@ public class FolderController extends HttpController {
         return new SuccessResponse().setSuccess(false);
     }
 
+    public static Folder getTopFolder(Folder folder){
+        if (folder != null && folder.parentId != 0) {
+            return getTopFolder(Repo.get(Folder.class).get(folder.parentId));
+        }
+        return folder;
+    }
+
     public static boolean userInFolder(int user, Folder folder){
-        FolderUser folderUser = Repo.get(FolderUser.class).where("userId", user).where("folderId", folder.id).get();
+        FolderUser folderUser = Repo.get(FolderUser.class)
+                .where("userId", user)
+                .where("folderId", getTopFolder(folder).id)
+                .get();
         if (folderUser != null) {
-            if (folder.parentId != 0)
-                return userInFolder(user, folder);
             return true;
         }
         return false;
