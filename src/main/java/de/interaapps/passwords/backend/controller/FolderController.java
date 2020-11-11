@@ -8,6 +8,8 @@ import de.interaapps.passwords.backend.models.database.Password;
 import de.interaapps.passwords.backend.models.responses.SuccessResponse;
 import org.javawebstack.framework.HttpController;
 import org.javawebstack.httpserver.Exchange;
+import org.javawebstack.httpserver.router.annotation.Delete;
+import org.javawebstack.httpserver.router.annotation.Path;
 import org.javawebstack.httpserver.router.annotation.PathPrefix;
 import org.javawebstack.httpserver.router.annotation.Put;
 import org.javawebstack.orm.Repo;
@@ -65,8 +67,21 @@ public class FolderController extends HttpController {
         return successResponse.setSuccess(true);
     }
 
+    @Delete("/{i+:id}")
+    public SuccessResponse delete(Exchange exchange, @Path("id") int id){
+        User user = exchange.attrib("user");
+
+        Folder folder = Repo.get(Folder.class).where("id", id).get();
+
+        if (folder != null && userInFolder(user, folder)) {
+            folder.delete();
+            return new SuccessResponse().setSuccess(true);
+        }
+        return new SuccessResponse().setSuccess(false);
+    }
+
     public static boolean userInFolder(int user, Folder folder){
-        FolderUser folderUser = Repo.get(FolderUser.class).where("userId", user).where("folderId", folder).get();
+        FolderUser folderUser = Repo.get(FolderUser.class).where("userId", user).where("folderId", folder.id).get();
         if (folderUser != null) {
             if (folder.parentId != 0)
                 return userInFolder(user, folder);

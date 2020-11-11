@@ -6,9 +6,7 @@ import de.interaapps.passwords.backend.models.database.Password;
 import de.interaapps.passwords.backend.models.responses.SuccessResponse;
 import org.javawebstack.framework.HttpController;
 import org.javawebstack.httpserver.Exchange;
-import org.javawebstack.httpserver.router.annotation.PathPrefix;
-import org.javawebstack.httpserver.router.annotation.Post;
-import org.javawebstack.httpserver.router.annotation.Put;
+import org.javawebstack.httpserver.router.annotation.*;
 import org.javawebstack.orm.Repo;
 
 import java.util.Map;
@@ -30,7 +28,7 @@ public class PasswordController extends HttpController {
 
         Password password = new Password();
 
-        if (oldPassword != null && oldPassword.userId == user.id) {
+        if (oldPassword != null && hasAccessToPassword(oldPassword.id, user.id)) {
             System.out.println("YEA");
             password = oldPassword;
         }
@@ -49,6 +47,16 @@ public class PasswordController extends HttpController {
         if (parameters.containsKey("description"))
             password.description = (String) parameters.get("description");
 
+
+        int folderId  = -1;
+
+        if (parameters.containsKey("folder"))
+            folderId = (int) (double) parameters.get("folder");
+
+        if (FolderController.userInFolder(user.id, folderId)){
+            password.folder = folderId;
+        }
+
         System.out.println(new Gson().toJson(password));
         System.out.println("SAVING");
         Repo.get(Password.class).save(password);
@@ -56,5 +64,32 @@ public class PasswordController extends HttpController {
         System.out.println(new Gson().toJson(password));
 
         return new SuccessResponse().setSuccess(true);
+    }
+
+    @Delete("/{i+:id}")
+    public SuccessResponse delete(Exchange exchange, @Path("id") int id){
+        User user = exchange.attrib("user");
+
+        Password password = Repo.get(Password.class).where("id", id).get();
+
+        if (password != null && hasAccessToPassword(password.id, user.id)) {
+            password.delete();
+            return new SuccessResponse().setSuccess(true);
+        }
+        return new SuccessResponse().setSuccess(false);
+    }
+
+    public static boolean hasAccessToPassword(Password password, int user){
+        if (password != null) {
+            if (password.userId == user)
+                return true;
+            if (password.folder != 0 && FolderController.userInFolder(user, password.folder))
+                return true;
+        }
+        return false;
+    }
+
+    public static boolean hasAccessToPassword(int passwordId, int user){
+        return hasAccessToPassword(Repo.get(Password.class).get(passwordId), user);
     }
 }
