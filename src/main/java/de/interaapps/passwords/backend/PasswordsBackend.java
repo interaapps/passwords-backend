@@ -15,7 +15,7 @@ import org.javawebstack.framework.config.Config;
 import org.javawebstack.httpclient.HTTPClient;
 import org.javawebstack.httpserver.HTTPServer;
 import org.javawebstack.httpserver.helper.HttpMethod;
-import org.javawebstack.httpserver.inject.SimpleInjector;
+import org.javawebstack.injector.SimpleInjector;
 import org.javawebstack.orm.ORM;
 import org.javawebstack.orm.ORMConfig;
 import org.javawebstack.orm.Repo;
@@ -65,6 +65,7 @@ public class PasswordsBackend extends WebApplication {
         config.addEnvFile(new File(".env"));
     }
 
+    @Override
     public void setupInjection(SimpleInjector simpleInjector) { }
 
     public void setupModels(SQL sql) {
@@ -96,7 +97,7 @@ public class PasswordsBackend extends WebApplication {
         httpServer.beforeInterceptor(exchange ->{
             exchange.header("SERVER", "InteraApps-k8s");
             if (exchange.getMethod() != HttpMethod.GET)
-                exchange.attrib("parameters", new Gson().fromJson(exchange.getBody(String.class), new TypeToken<Map<String, Object>>(){}.getType()));
+                exchange.attrib("parameters", new Gson().fromJson(exchange.body(String.class), new TypeToken<Map<String, Object>>(){}.getType()));
 
             if (exchange.header("X-Key") != null) {
                 User user = getUser(Repo.get(UserSession.class).where("key", exchange.header("X-Key")).get());
