@@ -1,10 +1,7 @@
 package de.interaapps.passwords.backend.controller;
 
 import de.interaapps.passwords.backend.models.User;
-import de.interaapps.passwords.backend.models.database.Folder;
-import de.interaapps.passwords.backend.models.database.FolderUser;
-import de.interaapps.passwords.backend.models.database.Key;
-import de.interaapps.passwords.backend.models.database.Password;
+import de.interaapps.passwords.backend.models.database.*;
 import de.interaapps.passwords.backend.models.responses.FetchResponse;
 import de.interaapps.passwords.backend.models.responses.PasswordListResponse;
 import org.javawebstack.framework.HttpController;
@@ -22,6 +19,7 @@ public class FetchController extends HttpController {
         fetchResponse.user = exchange.attrib("user");
         fetchResponse.passwords = new PasswordListResponse();
         fetchResponse.keys = Repo.get(Key.class).where("userId", fetchResponse.user.id).all();
+        fetchResponse.notes = Repo.get(Note.class).where("userId", fetchResponse.user.id).orderBy("updatedAt", true).all();
 
         fetchResponse.passwords.passwords = Repo.get(Password.class).where("userId", fetchResponse.user.id).all();
 
@@ -41,9 +39,6 @@ public class FetchController extends HttpController {
         if (parent != null && parent.parentId != 0)
             passwordListResponse.parent = parent.parentId;
 
-        System.out.println("USER: "+user.id);
-        System.out.println("PARENT: "+(parent == null ? 0 : parent.id));
-        System.out.println(Repo.get(FolderUser.class).where("userId", user.id).all().size());
         if (parent != null) {
             passwordListResponse.folder = parent;
             Repo.get(Folder.class).where("parentId", parent.id).all().forEach(folder -> {

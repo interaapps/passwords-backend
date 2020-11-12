@@ -78,6 +78,7 @@ public class FolderController extends HttpController {
 
         if (folder != null && userInFolder(user, folder)) {
             folder.delete();
+            Repo.get(FolderUser.class).where("folderId", folder.id).delete();
             return new SuccessResponse().setSuccess(true);
         }
         return new SuccessResponse().setSuccess(false);

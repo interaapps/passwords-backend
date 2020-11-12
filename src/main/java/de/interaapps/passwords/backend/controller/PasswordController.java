@@ -57,11 +57,7 @@ public class PasswordController extends HttpController {
             password.folder = folderId;
         }
 
-        System.out.println(new Gson().toJson(password));
-        System.out.println("SAVING");
         Repo.get(Password.class).save(password);
-        System.out.println("SAVED TO "+password.id);
-        System.out.println(new Gson().toJson(password));
 
         return new SuccessResponse().setSuccess(true);
     }

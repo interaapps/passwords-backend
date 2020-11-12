@@ -81,6 +81,7 @@ public class PasswordsBackend extends WebApplication {
             ORM.register(Folder.class, sql, config).autoMigrate();
             ORM.register(FolderUser.class, sql, config).autoMigrate();
             ORM.register(UserSession.class, sql, config).autoMigrate();
+            ORM.register(Note.class, sql, config).autoMigrate();
 
         } catch (ORMConfigurationException e) {
             e.printStackTrace();
