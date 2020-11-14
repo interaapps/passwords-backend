@@ -23,9 +23,7 @@ public class InteraAppsAuthController extends HttpController {
                 session.key = "S-NB01-"+RandomStringUtils.random(143, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyt0123456789");
                 session.userId  = user.id;
                 session.userKey = exchange.rawRequest().getParameter("userkey");
-                
                 session.save();
-
                 String url = PasswordsBackend.getInstance().getConfig().get("app.frontend")+"/auth?authentication="+ URLEncoder.encode(session.key);
                 exchange.redirect(url);
                 return "REDIRECTING TO FRONTEND... <a href=\""+url+"\">CLICK HERE</a>";

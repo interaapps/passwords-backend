@@ -105,7 +105,6 @@ public class PasswordsBackend extends WebApplication {
             exchange.header("SERVER", hostname+", InteraApps-k8s");
             if (exchange.getMethod() != HttpMethod.GET)
                 exchange.attrib("parameters", new Gson().fromJson(exchange.body(String.class), new TypeToken<Map<String, Object>>(){}.getType()));
-
             if (exchange.header("X-Key") != null) {
                 User user = getUser(Repo.get(UserSession.class).where("key", exchange.header("X-Key")).get());
                 exchange.attrib("user", user);
@@ -113,7 +112,6 @@ public class PasswordsBackend extends WebApplication {
             }
             if (exchange.rawRequest().getRequestURI().startsWith("/auth"))
                 return false;
-
             throw new AuthenticationException();
         });
 
@@ -150,6 +148,7 @@ public class PasswordsBackend extends WebApplication {
     }
 
     public User getUser(UserSession userSession) {
+        System.out.println("AAAAAAAAAAAHHHH");
         return getUserByKey(userSession.userKey);
     }
 
