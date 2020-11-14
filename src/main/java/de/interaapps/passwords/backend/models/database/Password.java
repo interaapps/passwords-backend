@@ -1,6 +1,5 @@
 package de.interaapps.passwords.backend.models.database;
 
-import com.google.gson.annotations.SerializedName;
 import org.javawebstack.orm.Model;
 import org.javawebstack.orm.annotation.Column;
 import org.javawebstack.orm.annotation.Dates;

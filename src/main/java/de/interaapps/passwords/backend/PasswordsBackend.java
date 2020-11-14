@@ -47,6 +47,7 @@ public class PasswordsBackend extends WebApplication {
 
     public static void main(String[] args) {
         instance = new PasswordsBackend();
+
         instance.run();
     }
 
@@ -94,6 +95,8 @@ public class PasswordsBackend extends WebApplication {
 
         interaAppsAccountsAPI = new HTTPClient()
                 .setBaseUrl("https://accounts.interaapps.de/iaauth/api");
+
+
 
         httpServer.beforeInterceptor(exchange ->{
             exchange.header("SERVER", "InteraApps-k8s");

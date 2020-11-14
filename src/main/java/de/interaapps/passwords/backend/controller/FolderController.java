@@ -1,10 +1,8 @@
 package de.interaapps.passwords.backend.controller;
 
-import com.google.gson.Gson;
 import de.interaapps.passwords.backend.models.User;
 import de.interaapps.passwords.backend.models.database.Folder;
 import de.interaapps.passwords.backend.models.database.FolderUser;
-import de.interaapps.passwords.backend.models.database.Password;
 import de.interaapps.passwords.backend.models.responses.SuccessResponse;
 import org.javawebstack.framework.HttpController;
 import org.javawebstack.httpserver.Exchange;

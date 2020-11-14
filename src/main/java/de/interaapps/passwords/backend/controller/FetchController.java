@@ -10,7 +10,6 @@ import org.javawebstack.httpserver.router.annotation.Get;
 import org.javawebstack.orm.Repo;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class FetchController extends HttpController {
     @Get("/fetch")
@@ -19,7 +18,7 @@ public class FetchController extends HttpController {
         fetchResponse.user = exchange.attrib("user");
         fetchResponse.passwords = new PasswordListResponse();
         fetchResponse.keys = Repo.get(Key.class).where("userId", fetchResponse.user.id).all();
-        fetchResponse.notes = Repo.get(Note.class).where("userId", fetchResponse.user.id).orderBy("updatedAt", true).all();
+        fetchResponse.notes = Repo.get(Note.class).where("userId", fetchResponse.user.id).order("updatedAt", true).all();
 
         fetchResponse.passwords.passwords = Repo.get(Password.class).where("userId", fetchResponse.user.id).all();
 

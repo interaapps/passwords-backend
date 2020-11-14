@@ -1,12 +1,14 @@
 package de.interaapps.passwords.backend.controller;
 
-import com.google.gson.Gson;
 import de.interaapps.passwords.backend.models.User;
 import de.interaapps.passwords.backend.models.database.Password;
 import de.interaapps.passwords.backend.models.responses.SuccessResponse;
 import org.javawebstack.framework.HttpController;
 import org.javawebstack.httpserver.Exchange;
-import org.javawebstack.httpserver.router.annotation.*;
+import org.javawebstack.httpserver.router.annotation.Delete;
+import org.javawebstack.httpserver.router.annotation.Path;
+import org.javawebstack.httpserver.router.annotation.PathPrefix;
+import org.javawebstack.httpserver.router.annotation.Put;
 import org.javawebstack.orm.Repo;
 
 import java.util.Map;
