@@ -99,7 +99,10 @@ public class PasswordsBackend extends WebApplication {
 
 
         httpServer.beforeInterceptor(exchange ->{
-            exchange.header("SERVER", "InteraApps-k8s");
+            String hostname = "passwords-api";
+            if (System.getenv("HOSTNAME") != null)
+                hostname = System.getenv("HOSTNAME");
+            exchange.header("SERVER", hostname+", InteraApps-k8s");
             if (exchange.getMethod() != HttpMethod.GET)
                 exchange.attrib("parameters", new Gson().fromJson(exchange.body(String.class), new TypeToken<Map<String, Object>>(){}.getType()));
 
