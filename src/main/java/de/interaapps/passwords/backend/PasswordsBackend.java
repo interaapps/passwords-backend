@@ -9,6 +9,7 @@ import de.interaapps.passwords.backend.exceptions.PageNotFoundException;
 import de.interaapps.passwords.backend.models.User;
 import de.interaapps.passwords.backend.models.database.*;
 import de.interaapps.passwords.backend.models.responses.ErrorResponse;
+import org.javawebstack.command.CommandSystem;
 import org.javawebstack.framework.HttpController;
 import org.javawebstack.framework.WebApplication;
 import org.javawebstack.framework.config.Config;
@@ -48,7 +49,7 @@ public class PasswordsBackend extends WebApplication {
     public static void main(String[] args) {
         instance = new PasswordsBackend();
 
-        instance.run();
+        instance.start();
     }
 
     @Override
@@ -127,6 +128,11 @@ public class PasswordsBackend extends WebApplication {
         });
 
         System.out.println("SERVING ON http://localhost:"+getConfig().get("http.server.port"));
+    }
+
+    @Override
+    protected void setupCommands(CommandSystem commandSystem) {
+
     }
 
     public HTTPClient getInteraAppsAccountsAPI() {
