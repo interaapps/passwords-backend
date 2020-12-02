@@ -15,7 +15,6 @@ public class FetchController extends HttpController {
     @Get("/fetch")
     public FetchResponse fetch(Exchange exchange) {
         FetchResponse fetchResponse = new FetchResponse();
-        System.out.println("YEEEEEEEEEEEEEEEEEEEEEEEZ");
         fetchResponse.user = exchange.attrib("user");
         fetchResponse.passwords = new PasswordListResponse();
         fetchResponse.keys = Repo.get(Key.class).where("userId", fetchResponse.user.id).all();
@@ -24,6 +23,7 @@ public class FetchController extends HttpController {
         fetchResponse.passwords.passwords = Repo.get(Password.class).where("userId", fetchResponse.user.id).all();
 
         fetchResponse.passwords = getPasswordsRecursive(fetchResponse.user, null);
+        fetchResponse.passwords.parent = -1;
 
         return fetchResponse;
     }

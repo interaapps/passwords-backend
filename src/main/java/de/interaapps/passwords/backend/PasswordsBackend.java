@@ -13,6 +13,7 @@ import org.javawebstack.command.CommandSystem;
 import org.javawebstack.framework.HttpController;
 import org.javawebstack.framework.WebApplication;
 import org.javawebstack.framework.config.Config;
+import org.javawebstack.graph.GraphObject;
 import org.javawebstack.httpclient.HTTPClient;
 import org.javawebstack.httpserver.HTTPServer;
 import org.javawebstack.httpserver.helper.HttpMethod;
@@ -97,13 +98,11 @@ public class PasswordsBackend extends WebApplication {
         interaAppsAccountsAPI = new HTTPClient()
                 .setBaseUrl("https://accounts.interaapps.de/iaauth/api");
 
-
-
         httpServer.beforeInterceptor(exchange ->{
             String hostname = "passwords-api";
             if (System.getenv("HOSTNAME") != null)
                 hostname = System.getenv("HOSTNAME");
-            exchange.header("SERVER", hostname+", InteraApps-k8s");
+            exchange.header("server-name", hostname+", InteraApps-k8s");
             if (exchange.getMethod() != HttpMethod.GET)
                 exchange.attrib("parameters", new Gson().fromJson(exchange.body(String.class), new TypeToken<Map<String, Object>>(){}.getType()));
             if (exchange.header("X-Key") != null) {
@@ -144,13 +143,21 @@ public class PasswordsBackend extends WebApplication {
     }
 
     public User getUserByKey(String userKey){
+
+        System.out.println(interaAppsAccountsAPI
+                .post("/getuserinformation")
+                .body(new GraphObject()
+                        .set("userkey", userKey)
+                        .set("key", getConfig().get("interaapps.auth.key"))
+                        .toFormData().toString()).string());
+
         return interaAppsAccountsAPI
                 .post("/getuserinformation")
-                .formBody(new HashMap(){{
-                              put("userkey", userKey);
-                              put("key", getConfig().get("interaapps.auth.key"));
-                          }}
-                ).json(User.class);
+                .body(new GraphObject()
+                        .set("userkey", userKey)
+                        .set("key", getConfig().get("interaapps.auth.key"))
+                        .toFormData().toString())
+                .object(User.class);
     }
 
     public User getUser(UserSession userSession) {
