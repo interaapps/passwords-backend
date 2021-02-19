@@ -27,7 +27,7 @@ public class FolderController extends HttpController {
         if (parameters.containsKey("id"))
             id = (int) (double) parameters.get("id");
 
-        Folder oldFolder = Repo.get(Folder.class).where("id", id).get();
+        Folder oldFolder = Repo.get(Folder.class).where("id", id).first();
 
         Folder folder = new Folder();
 
@@ -72,7 +72,7 @@ public class FolderController extends HttpController {
     public SuccessResponse delete(Exchange exchange, @Path("id") int id){
         User user = exchange.attrib("user");
 
-        Folder folder = Repo.get(Folder.class).where("id", id).get();
+        Folder folder = Repo.get(Folder.class).where("id", id).first();
 
         if (folder != null && userInFolder(user, folder)) {
             folder.delete();
@@ -93,7 +93,7 @@ public class FolderController extends HttpController {
         FolderUser folderUser = Repo.get(FolderUser.class)
                 .where("userId", user)
                 .where("folderId", getTopFolder(folder).id)
-                .get();
+                .first();
         if (folderUser != null) {
             return true;
         }

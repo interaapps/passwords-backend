@@ -26,7 +26,7 @@ public class PasswordController extends HttpController {
         if (parameters.containsKey("id"))
             id = (int) (double) parameters.get("id");
 
-        Password oldPassword = Repo.get(Password.class).where("id", id).get();
+        Password oldPassword = Repo.get(Password.class).where("id", id).first();
 
         Password password = new Password();
 
@@ -68,7 +68,7 @@ public class PasswordController extends HttpController {
     public SuccessResponse delete(Exchange exchange, @Path("id") int id){
         User user = exchange.attrib("user");
 
-        Password password = Repo.get(Password.class).where("id", id).get();
+        Password password = Repo.get(Password.class).where("id", id).first();
 
         if (password != null && hasAccessToPassword(password.id, user.id)) {
             password.delete();

@@ -27,7 +27,7 @@ public class NotesController extends HttpController {
         if (parameters.containsKey("id"))
             id = (int) (double) parameters.get("id");
 
-        Note oldNote = Repo.get(Note.class).where("id", id).get();
+        Note oldNote = Repo.get(Note.class).where("id", id).first();
 
         Note note = new Note();
 
@@ -55,7 +55,7 @@ public class NotesController extends HttpController {
     public SuccessResponse delete(Exchange exchange, @Path("id") int id){
         User user = exchange.attrib("user");
 
-        Note note = Repo.get(Note.class).where("id", id).get();
+        Note note = Repo.get(Note.class).where("id", id).first();
 
         if (note != null && note.userId == user.id) {
             note.delete();

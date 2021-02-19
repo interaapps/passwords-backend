@@ -48,7 +48,7 @@ public class FetchController extends HttpController {
             for (FolderUser folderUser : Repo.get(FolderUser.class).where("userId", user.id).all()) {
                 Folder folder = Repo.get(Folder.class)
                         .where("parentId", 0)
-                        .where("id", folderUser.folderId).get();
+                        .where("id", folderUser.folderId).first();
                 if (folder != null)
                     passwordListResponse.folders.add(getPasswordsRecursive(user, folder));
             }

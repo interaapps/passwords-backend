@@ -9,11 +9,11 @@ import de.interaapps.passwords.backend.exceptions.PageNotFoundException;
 import de.interaapps.passwords.backend.models.User;
 import de.interaapps.passwords.backend.models.database.*;
 import de.interaapps.passwords.backend.models.responses.ErrorResponse;
+import org.javawebstack.abstractdata.AbstractObject;
 import org.javawebstack.command.CommandSystem;
 import org.javawebstack.framework.HttpController;
 import org.javawebstack.framework.WebApplication;
 import org.javawebstack.framework.config.Config;
-import org.javawebstack.graph.GraphObject;
 import org.javawebstack.httpclient.HTTPClient;
 import org.javawebstack.httpserver.HTTPServer;
 import org.javawebstack.httpserver.helper.HttpMethod;
@@ -64,12 +64,8 @@ public class PasswordsBackend extends WebApplication {
         map.put("INTERAAPPS_AUTH_ID", "interaapps.auth.id");
         map.put("APP_FRONTEND", "app.frontend");
         config.addEnvKeyMapping(map);
-        System.out.println(new File(".env").exists());
         config.addEnvFile(new File(".env"));
     }
-
-    @Override
-    public void setupInjection(SimpleInjector simpleInjector) { }
 
     public void setupModels(SQL sql) {
         Handler handler = new ConsoleHandler();
@@ -106,7 +102,7 @@ public class PasswordsBackend extends WebApplication {
             if (exchange.getMethod() != HttpMethod.GET)
                 exchange.attrib("parameters", new Gson().fromJson(exchange.body(String.class), new TypeToken<Map<String, Object>>(){}.getType()));
             if (exchange.header("X-Key") != null) {
-                User user = getUser(Repo.get(UserSession.class).where("key", exchange.header("X-Key")).get());
+                User user = getUser(Repo.get(UserSession.class).where("key", exchange.header("X-Key")).first());
                 exchange.attrib("user", user);
                 return false;
             }
@@ -146,14 +142,14 @@ public class PasswordsBackend extends WebApplication {
 
         System.out.println(interaAppsAccountsAPI
                 .post("/getuserinformation")
-                .body(new GraphObject()
+                .body(new AbstractObject()
                         .set("userkey", userKey)
                         .set("key", getConfig().get("interaapps.auth.key"))
                         .toFormData().toString()).string());
 
         return interaAppsAccountsAPI
                 .post("/getuserinformation")
-                .body(new GraphObject()
+                .body(new AbstractObject()
                         .set("userkey", userKey)
                         .set("key", getConfig().get("interaapps.auth.key"))
                         .toFormData().toString())

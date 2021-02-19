@@ -24,7 +24,7 @@ public class KeyController extends HttpController {
         if (parameters.containsKey("id"))
             id = (int) (double) parameters.get("id");
 
-        Key oldKey = Repo.get(Key.class).where("userId", user.id).where("id", id).get();
+        Key oldKey = Repo.get(Key.class).where("userId", user.id).where("id", id).first();
 
         Key key = new Key();
 
