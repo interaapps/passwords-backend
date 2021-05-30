@@ -33,6 +33,9 @@ public class Password extends Model {
     public String description;
 
     @Column
+    public String totp;
+
+    @Column
     public int folder;
 
     @Column

@@ -88,7 +88,6 @@ public class PasswordsBackend extends WebApplication {
     }
 
     public void setupServer(HTTPServer httpServer) {
-        System.out.println("Working Directory = " + System.getProperty("user.dir"));
         httpServer.controller(HttpController.class, PasswordController.class.getPackage());
 
         interaAppsAccountsAPI = new HTTPClient()
@@ -121,8 +120,6 @@ public class PasswordsBackend extends WebApplication {
         httpServer.notFound(exchange -> {
             throw new PageNotFoundException();
         });
-
-        System.out.println("SERVING ON http://localhost:"+getConfig().get("http.server.port"));
     }
 
     @Override

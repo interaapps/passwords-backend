@@ -48,6 +48,8 @@ public class PasswordController extends HttpController {
             password.website = (String) parameters.get("website");
         if (parameters.containsKey("description"))
             password.description = (String) parameters.get("description");
+        if (parameters.containsKey("totp"))
+            password.totp = (String) parameters.get("totp");
 
 
         int folderId  = -1;
