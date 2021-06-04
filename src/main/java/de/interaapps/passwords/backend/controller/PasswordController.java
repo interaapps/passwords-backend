@@ -63,7 +63,7 @@ public class PasswordController extends HttpController {
 
         Repo.get(Password.class).save(password);
 
-        return new SuccessResponse().setSuccess(true);
+        return new SuccessResponse().setSuccess(true).setExtra("id", password.id);
     }
 
     @Delete("/{i+:id}")

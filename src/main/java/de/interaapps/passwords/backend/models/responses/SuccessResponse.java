@@ -16,7 +16,8 @@ public class SuccessResponse {
         return extra;
     }
 
-    public void setExtra(String key, Object value) {
+    public SuccessResponse setExtra(String key, Object value) {
         this.extra.put(key, value);
+        return this;
     }
 }

@@ -44,9 +44,7 @@ public class FolderController extends HttpController {
 
 
         if (oldFolder == null) {
-            System.out.println("YEA");
             if (parameters.containsKey("parent") && userInFolder(user.id, (int) (double) parameters.get("parent"))) {
-                System.out.println("PARENTED");
                 folder.parentId = (int) (double) parameters.get("parent");
             }
         }
